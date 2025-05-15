@@ -1,4 +1,4 @@
-import {Puppy} from "../types";
+import {type Puppy} from "../types";
 
 export const puppies: Puppy[] = [
     {
