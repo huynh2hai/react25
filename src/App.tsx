@@ -9,6 +9,7 @@ import {NewPuppyForm} from "./components/NewPuppyForm";
 import {puppies} from "./data/puppies.js";
 import {useState} from "react";
 import {Puppy} from "./types";
+import {LikedContext} from "./context/liked-context";
 
 export function App() {
     return (
@@ -26,11 +27,13 @@ function Main() {
 
     return (
         <main>
-            <div className="mt-24 grid gap-8 sm:grid-cols-2">
-                <Search />
-                <Sortlist puppies={puppies} liked={liked} setLiked={setLiked} />
-            </div>
-            <PuppiesList puppies={puppies} liked={liked} setLiked={setLiked} />
+            <LikedContext value={{liked, setLiked}}>
+                <div className="mt-24 grid gap-8 sm:grid-cols-2">
+                    <Search />
+                    <Sortlist puppies={puppies} />
+                </div>
+                <PuppiesList puppies={puppies} />
+            </LikedContext>
             <NewPuppyForm />
         </main>
 
