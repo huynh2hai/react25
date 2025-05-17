@@ -6,7 +6,7 @@ import {Sortlist} from "./components/Sortlist";
 import {PuppiesList} from "./components/PuppiesList.js";
 import {NewPuppyForm} from "./components/NewPuppyForm";
 
-import {puppies} from "./data/puppies.js";
+import {puppies as puppiesData} from "./data/puppies.js";
 import {useState} from "react";
 import {Puppy} from "./types";
 
@@ -24,6 +24,7 @@ export function App() {
 function Main() {
     const [liked, setLiked] = useState<Puppy["id"][]>([1, 3]);
     const [searchQuery, setSearchQuery] = useState<string>("");
+    const [puppies, setPuppies] = useState<Puppy[]>(puppiesData);
 
 
     return (
@@ -33,7 +34,7 @@ function Main() {
                 <Sortlist puppies={puppies} liked={liked} setLiked={setLiked} />
             </div>
             <PuppiesList searchQuery={searchQuery} puppies={puppies} liked={liked} setLiked={setLiked} />
-            <NewPuppyForm />
+            <NewPuppyForm puppies={puppies} setPuppies={setPuppies} />
         </main>
 
     );
