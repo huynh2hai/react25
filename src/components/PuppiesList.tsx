@@ -3,17 +3,21 @@ import {LikeToggle} from "./LikeToggle";
 import {Dispatch, SetStateAction} from "react";
 
 export function PuppiesList({
+    searchQuery,
     puppies,
     liked,
     setLiked,
 }: {
+    searchQuery: string;
     puppies: Puppy[];
     liked: Puppy["id"][];
     setLiked: Dispatch<SetStateAction<Puppy["id"][]>>;
 }) {
     return (
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {puppies.map((puppy) => (
+            {puppies
+            .filter((pup) => pup.vibe.toLowerCase().includes(searchQuery.toLowerCase()))
+            .map((puppy) => (
                 <PuppyCard key={puppy.id} puppy={puppy} liked={liked} setLiked={setLiked} />
             ))}
         </ul>
