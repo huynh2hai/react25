@@ -10,7 +10,7 @@ export function ShortlistItem({puppy}: {
                 width={32}
                 alt="Chase"
                 className="aspect-square w-8 object-cover"
-                src={puppy.imagePath}
+                src={puppy.imageUrl}
             />
             <p className="px-3 text-sm text-slate-800">{puppy.name}</p>
             <button className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100">

@@ -1,14 +1,13 @@
 import {Puppy} from "../types";
-import { ShortlistItem } from "./ShortlistItem";
-import {PuppiesList} from "./PuppiesList";
-import {Dispatch, SetStateAction} from "react";
-import {Heart, X} from "lucide-react";
+import {Heart, LoaderCircle, X} from "lucide-react";
+import {toggleLikedStatus} from "../queries";
+import {Dispatch, SetStateAction, useState} from "react";
 
-export function Sortlist({puppies, liked, setLiked}: {
+export function Sortlist({puppies, setPuppies}: {
     puppies: Puppy[];
-    liked: Puppy["id"][];
-    setLiked: Dispatch<SetStateAction<Puppy["id"][]>>;
+    setPuppies: Dispatch<SetStateAction<Puppy[]>>;
 }) {
+
     return (
         <div>
             <h2 className="flex items-center gap-2 font-medium">
@@ -17,7 +16,7 @@ export function Sortlist({puppies, liked, setLiked}: {
             </h2>
             <ul className="mt-4 flex flex-wrap gap-4">
                 {puppies
-                    .filter(pup => liked.includes(pup.id))
+                    .filter(pup => pup.likedBy.includes(1))
                     .map((puppy) => (
                     <li key={puppy.id} className="relative flex items-center overflow-clip rounded-md bg-white shadow-sm ring ring-black/5 transition duration-100 starting:scale-0 starting:opacity-0">
                         <img
@@ -25,19 +24,40 @@ export function Sortlist({puppies, liked, setLiked}: {
                             width={32}
                             alt={puppy.name}
                             className="aspect-square w-8 object-cover"
-                            src={puppy.imagePath}
+                            src={puppy.imageUrl}
                         />
                         <p className="px-3 text-sm text-slate-800">{puppy.name}</p>
-                        <button
-                            onClick={
-                                () => setLiked(liked.filter(id => id !== puppy.id))
-                            }
-                            className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100">
-                            <X className="size-4 stroke-slate-400 group-hover:stroke-red-400" />
-                        </button>
+                        <DeleteButton puppy={puppy} setPuppies={setPuppies} />
                     </li>
                 ))}
             </ul>
         </div>
+    );
+}
+
+function DeleteButton({puppy, setPuppies}: {puppy: Puppy; setPuppies: Dispatch<SetStateAction<Puppy[]>>;}) {
+    const [pending, isPending] = useState(false);
+    return (
+        <button
+            onClick={
+                async () => {
+                    isPending(true);
+                    const newPuppies = await toggleLikedStatus(puppy.id);
+
+                    setPuppies(newPuppies);
+
+                    isPending(false);
+                }
+            }
+            className="group h-full border-l border-slate-100 px-2 hover:bg-slate-100"
+            disabled={pending}
+        >
+            {pending ? (
+                <LoaderCircle className="size-4 animate-spin stroke-slate-300" />
+            ) : (
+                <X className="size-4 stroke-slate-400 group-hover:stroke-red-400" />
+            )}
+
+        </button>
     );
 }
