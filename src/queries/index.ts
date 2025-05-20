@@ -31,13 +31,42 @@ export async function toggleLikedStatus(id: Puppy["id"]) {
 
         if (!response.ok) {
             throw await response.json();
-        };
+        }
 
         const {data} = await response.json();
+
+
+        data.imageUrl = data.imageUrl.replace('http://localhost', 'http://localhost:5173');
 
         return data;
     } catch (error) {
         console.error(error);
         throw error;
+    }
+}
+
+export async function createPuppy(formData: FormData) {
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/puppies`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+            },
+            body: formData,
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw errorData;
+        }
+
+        const data = await response.json();
+
+
+        // data.imageUrl = data.imageUrl.replace('http://localhost', 'http://localhost:5173');
+
+        return data;
+    } catch (error) {
+        return error;
     }
 }

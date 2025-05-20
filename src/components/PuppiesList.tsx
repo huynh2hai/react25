@@ -16,7 +16,7 @@ export function PuppiesList({
             {puppies
             .filter((pup) => pup.trait.toLowerCase().includes(searchQuery.toLowerCase()))
             .map((puppy) => (
-                <PuppyCard key={puppy.id} puppy={puppy} />
+                <PuppyCard key={puppy.id} puppy={puppy} setPuppies={setPuppies} />
             ))}
         </ul>
     );

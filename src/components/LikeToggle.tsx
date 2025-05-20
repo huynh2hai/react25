@@ -12,17 +12,13 @@ export function LikeToggle({puppy, setPuppies}: {
 
     return (<button className="group" onClick={async () => {
             setPending(true);
-            const updatedPuppies = await toggleLikedStatus(puppy.id);
-            setPuppies(updatedPuppies);
+            const updatedPuppy = await toggleLikedStatus(puppy.id);
+            setPuppies((prevPups) => {
+                return prevPups.map((existingPuppy) =>
+                    existingPuppy.id === updatedPuppy.id ? updatedPuppy : existingPuppy,
+                );
+            });
             setPending(false);
-            // setTimeout(() => {
-            //     if (liked.includes(id)) {
-            //         setLiked(liked.filter(pupId => pupId !== id));
-            //     } else {
-            //         setLiked([...liked, id]);
-            //     }
-            //     setPending(false);
-            // }, 1500);
         }}>
             {pending ? (
                 <LoaderCircle className="animate-spin stroke-slate-300"/>
